@@ -1,0 +1,17 @@
+{
+  "users": {
+    "5696910867": {
+      "active": true,
+      "current_task": "Проект",
+      "log": [
+        {
+          "time": "16.03 19:47",
+          "text": "Проект",
+          "type": "task"
+        }
+      ],
+      "streak": 0,
+      "last_checkin": null
+    }
+  }
+}
