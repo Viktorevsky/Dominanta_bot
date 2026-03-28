@@ -1,6 +1,7 @@
 from questions import PROGRAMMING_QUESTIONS
 from news import fetch_random_article, format_article
 
+from dotenv import load_dotenv
 import logging
 import random
 import json
@@ -19,7 +20,8 @@ from telegram.ext import (
 # ─────────────────────────────────────────────
 # НАСТРОЙКИ
 # ─────────────────────────────────────────────
-BOT_TOKEN = "8604572728:AAEl4XQgQdvmna7xZW0aXCsIM-S_DWvQbI0"
+load_dotenv()
+os.getenv('BOT_TOKEN')
 
 # Расписание напоминаний (часы UTC, поправь под свой часовой пояс)
 SCHEDULED_HOURS = [15, 19]  # 09:00, 13:00, 18:00, 21:00
