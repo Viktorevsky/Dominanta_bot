@@ -6,7 +6,6 @@ import logging
 import random
 import json
 import os
-from datetime import datetime, time
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import (
     Application,
@@ -14,14 +13,16 @@ from telegram.ext import (
     MessageHandler,
     ContextTypes,
     filters,
-    ConversationHandler,
 )
+from datetime import datetime
 
 # ─────────────────────────────────────────────
 # НАСТРОЙКИ
 # ─────────────────────────────────────────────
 load_dotenv()
-os.getenv('BOT_TOKEN')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+if not BOT_TOKEN:
+    raise ValueError("BOT_TOKEN не найден!")
 
 # Расписание напоминаний (часы UTC, поправь под свой часовой пояс)
 SCHEDULED_HOURS = [15, 19]  # 09:00, 13:00, 18:00, 21:00
@@ -154,7 +155,7 @@ async def news_reminder(context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=chat_id,
                 text=format_article(article),
-                parse_mode="Markdown",
+                parse_mode=None,
                 disable_web_page_preview=False,
             )
         except Exception as e:
@@ -285,7 +286,7 @@ async def cmd_news(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if article:
         await update.message.reply_text(
             format_article(article),
-            parse_mode="Markdown",
+            parse_mode=None,
             disable_web_page_preview=False,
         )
     else:
