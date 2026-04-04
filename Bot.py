@@ -121,6 +121,7 @@ async def random_reminder(context: ContextTypes.DEFAULT_TYPE):
     schedule_random_reminder(context, chat_id)
  
 async def quiz_reminder(context: ContextTypes.DEFAULT_TYPE):
+    print("🧠 quiz_reminder ВЫЗВАН!")
     chat_id = context.job.chat_id
     data = load_data()
  
@@ -142,6 +143,7 @@ async def quiz_reminder(context: ContextTypes.DEFAULT_TYPE):
     context.job_queue.run_once(quiz_reminder, when=delay, chat_id=chat_id)
  
 async def news_reminder(context: ContextTypes.DEFAULT_TYPE):
+    print("📰 news_reminder ВЫЗВАН!")  # добавь это
     chat_id = context.job.chat_id
     data = load_data()
  
@@ -208,16 +210,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
  
     context.job_queue.run_once(
         quiz_reminder,
-        when=random.randint(60, 180) * 60,
+        when=20,
         chat_id=chat_id,
         name=f"quiz_{chat_id}",
     )
     context.job_queue.run_once(
         news_reminder,
-        when=random.randint(30, 90) * 60,
+        when=10,
         chat_id=chat_id,
         name=f"news_{chat_id}",
     )
+
+    jobs = context.job_queue.jobs()
+    print(f"Активных jobs: {len(jobs)}")
+    for j in jobs:
+        print(f"  - {j.name} запустится через {j.next_t}")
  
 async def cmd_task(update: Update, context: ContextTypes.DEFAULT_TYPE):
     question = random.choice(DAILY_QUESTIONS)
@@ -363,7 +370,7 @@ def main():
     app.add_handler(CommandHandler("log", cmd_log))
     app.add_handler(CommandHandler("streak", cmd_streak))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
- 
+    
     print("🤖 Бот запущен! Ctrl+C для остановки.")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
  
